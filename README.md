@@ -11,4 +11,4 @@ jornal web sobre games
 - HTML5, CSS3, JavaScript
 
 ## 🔗 Links
-[Acesse o site](https://seuusuario.github.io/agencia-noticias)
+[Acesse o site](https://ogteteu.github.io/teteu/)
