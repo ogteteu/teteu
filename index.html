@@ -2,10 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>GameNews Brasil</title>
+    <title>GameNews Brasil - Portal Profissional</title>
 
     <!-- Fontes Gamer -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Roboto&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
         body {
@@ -13,71 +13,362 @@
             font-family: 'Roboto', sans-serif;
             background: radial-gradient(circle at top, #020617, #000);
             color: #e5e7eb;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Canvas para os controles caindo */
+        #controlesCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
 
         header {
-            background: linear-gradient(90deg, #00ff99, #00ccff);
-            padding: 25px;
+            background: linear-gradient(90deg, #00ff99, #00ccff, #9900ff);
+            padding: 30px 25px;
             text-align: center;
-            box-shadow: 0 0 25px #00ff99;
+            box-shadow: 0 0 30px #00ff99, 0 0 60px #00ccff;
+            position: relative;
+            z-index: 1;
+            border-bottom: 3px solid rgba(255,255,255,0.3);
+            animation: brilhoHeader 3s infinite alternate;
+        }
+
+        @keyframes brilhoHeader {
+            0% { box-shadow: 0 0 30px #00ff99, 0 0 60px #00ccff; }
+            100% { box-shadow: 0 0 50px #9900ff, 0 0 90px #00ff99; }
         }
 
         header h1 {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
-            font-size: 38px;
+            font-size: 42px;
+            font-weight: 900;
             color: #020617;
+            text-shadow: 3px 3px 0 #00ff99, 5px 5px 0 #00ccff;
+            letter-spacing: 2px;
+            animation: tituloPulsar 2s ease-in-out infinite;
+        }
+
+        @keyframes tituloPulsar {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .subtitulo {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: #ffffff;
+            background: rgba(2, 6, 23, 0.4);
+            backdrop-filter: blur(5px);
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 15px 0 10px 0;
+            letter-spacing: 1px;
+            border: 1px solid rgba(0, 255, 153, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.2);
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subtitulo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 153, 0.2), transparent);
+            animation: brilhoSubtitulo 3s infinite;
+        }
+
+        @keyframes brilhoSubtitulo {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .subtitulo span {
+            color: #00ff99;
+            font-weight: 600;
+            margin: 0 5px;
+        }
+
+        .criado-por {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 14px;
+            color: #020617;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            padding: 8px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,0.5);
+            font-weight: 400;
+            letter-spacing: 1px;
         }
 
         main {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: auto;
             padding: 30px 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .noticia {
-            background: #020617;
-            margin-bottom: 30px;
+        /* LAYOUT PROFISSIONAL - GRADE DE NOTÍCIAS */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        /* NOTÍCIA PRINCIPAL (GRANDE) */
+        .noticia-principal {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(5px);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 0 15px rgba(0,255,153,0.3);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,255,153,0.2);
+            position: relative;
         }
 
-        .noticia img {
+        .noticia-principal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0,255,153,0.6);
+            border-color: #00ff99;
+        }
+
+        .noticia-principal img {
             width: 100%;
-            height: 260px;
+            height: 300px;
             object-fit: cover;
+            transition: transform 0.5s;
         }
 
-        .conteudo {
+        .noticia-principal:hover img {
+            transform: scale(1.05);
+        }
+
+        .noticia-principal .conteudo {
             padding: 20px;
         }
 
-        .conteudo h2 {
+        .noticia-principal h2 {
             font-family: 'Orbitron', sans-serif;
             color: #00ff99;
             margin-top: 0;
+            font-size: 26px;
+            text-shadow: 0 0 10px rgba(0,255,153,0.5);
         }
 
-        .media {
-            margin-top: 15px;
+        /* SIDEBAR COM NOTÍCIAS PEQUENAS */
+        .sidebar-noticias {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .noticia-pequena {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,204,255,0.3);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,204,255,0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noticia-pequena:hover {
+            transform: translateX(5px);
+            box-shadow: 0 0 25px rgba(0,204,255,0.6);
+            border-color: #00ccff;
+        }
+
+        .noticia-pequena img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .noticia-pequena:hover img {
+            transform: scale(1.05);
+        }
+
+        .noticia-pequena .conteudo {
+            padding: 15px;
+        }
+
+        .noticia-pequena h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ccff;
+            margin: 0 0 8px 0;
+            font-size: 18px;
+        }
+
+        .noticia-pequena p {
+            margin: 0;
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.4;
+        }
+
+        .noticia-pequena .meta {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* NOVAS NOTÍCIAS MÉDIAS */
+        .noticias-secundarias {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .card-noticia {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(153,0,255,0.3);
+            transition: all 0.3s;
+            border: 1px solid rgba(153,0,255,0.2);
+            position: relative;
+        }
+
+        .card-noticia:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(153,0,255,0.6);
+            border-color: #9900ff;
+        }
+
+        .card-noticia img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .card-noticia:hover img {
+            transform: scale(1.05);
+        }
+
+        .card-noticia .conteudo {
+            padding: 15px;
+        }
+
+        .card-noticia h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #9900ff;
+            margin: 0 0 8px 0;
+            font-size: 16px;
+        }
+
+        .card-noticia p {
+            margin: 0;
+            font-size: 13px;
+            color: #cccccc;
+            line-height: 1.4;
+        }
+
+        .card-noticia .tag {
+            display: inline-block;
+            background: rgba(153,0,255,0.3);
+            color: #fff;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 10px;
+            border: 1px solid #9900ff;
+        }
+
+        /* SEÇÃO DE MÍDIA (VÍDEO E ÁUDIO) */
+        .media-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .noticia-media {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(255,0,255,0.3);
+            transition: all 0.3s;
+            border: 1px solid rgba(255,0,255,0.2);
+        }
+
+        .noticia-media:hover {
+            box-shadow: 0 0 25px rgba(255,0,255,0.6);
+            border-color: #ff00ff;
+        }
+
+        .noticia-media img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .noticia-media .conteudo {
+            padding: 20px;
+        }
+
+        .noticia-media h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff00ff;
+            margin: 0 0 15px 0;
         }
 
         video, audio {
             width: 100%;
             margin-top: 10px;
             border-radius: 8px;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 20px rgba(255,0,255,0.3);
         }
 
         /* Colaboradores */
         .colaboradores {
-            margin-top: 50px;
+            margin: 50px 0;
             text-align: center;
         }
 
         .colaboradores h2 {
             font-family: 'Orbitron', sans-serif;
             color: #00ccff;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px #00ccff;
+            animation: tituloColaboradores 2s infinite;
+        }
+
+        @keyframes tituloColaboradores {
+            0% { text-shadow: 0 0 15px #00ccff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 15px #00ccff; }
+            100% { text-shadow: 0 0 15px #00ccff; }
         }
 
         .cards {
@@ -88,101 +379,326 @@
         }
 
         .card {
-            background: #020617;
-            padding: 15px;
-            border-radius: 10px;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 15px;
             width: 200px;
-            box-shadow: 0 0 10px rgba(0,204,255,0.4);
+            box-shadow: 0 0 15px rgba(0,204,255,0.4);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,204,255,0.3);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(255,0,255,0.4);
+            border-color: #00ccff;
+        }
+
+        .card p:first-child {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #00ff99;
+            margin: 0 0 10px 0;
+        }
+
+        .card p:last-child {
+            font-size: 14px;
+            color: #cccccc;
+            margin: 0;
         }
 
         footer {
             margin-top: 40px;
-            background: #020617;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(5px);
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             border-top: 2px solid #00ff99;
             font-size: 14px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        @media (max-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .noticias-secundarias {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .media-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .noticias-secundarias {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 32px;
+            }
         }
     </style>
 </head>
 
 <body>
+    <canvas id="controlesCanvas"></canvas>
 
-<header>
-    <h1>🎮 GameNews Brasil</h1>
-    <p>Notícias, lançamentos e tendências do mundo gamer</p>
-    <p>Criado por: flexes</p>
-</header>
+    <header>
+        <h1>🎮 GameNews Brasil</h1>
+        <div class="subtitulo">
+            <span>▶</span> Portal profissional de notícias gamers <span>◀</span>
+        </div>
+        <div class="criado-por">
+            Criado por: Respawn
+        </div>
+    </header>
 
-<main>
+    <main>
+        <!-- LAYOUT PROFISSIONAL: NOTÍCIA PRINCIPAL + 3 PEQUENAS -->
+        <div class="grid-container">
+            <!-- Notícia Principal -->
+            <div class="noticia-principal">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420" alt="Jogos AAA">
+                <div class="conteudo">
+                    <h2>🔥 Jogos AAA dominam 2026</h2>
+                    <p>Estúdios apostam em mundos abertos gigantes e experiências cada vez mais realistas. Grandes franquias preparam lançamentos para o próximo ano.</p>
+                    <div style="color: #888; margin-top: 15px;">
+                        <span>📅 15/03/2026</span> • <span>👁️ 2.5k visualizações</span>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Notícia com VÍDEO -->
-    <div class="noticia">
-        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420" alt="Jogos AAA">
-        <div class="conteudo">
-            <h2>🔥 Jogos AAA dominam 2026</h2>
-            <p>Estúdios apostam em mundos abertos gigantes e experiências cada vez mais realistas.</p>
+            <!-- Sidebar com 3 notícias pequenas -->
+            <div class="sidebar-noticias">
+                <!-- Notícia Pequena 1 -->
+                <div class="noticia-pequena">
+                    <img src="imagens/vr.jpg" alt="VR">
+                    <div class="conteudo">
+                        <h3>🎮 Realidade virtual em alta</h3>
+                        <p>Vendas de óculos VR crescem 200% no primeiro trimestre.</p>
+                        <div class="meta">
+                            <span>🔹 Há 2 horas</span>
+                            <span>💬 45 comentários</span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="media">
-                <p>🎥 Vídeo relacionado:</p>
-                <video controls>
-                    <source src="video.mp4" type="video/mp4">
-                    Seu navegador não suporta vídeo.
-                </video>
+                <!-- Notícia Pequena 2 -->
+                <div class="noticia-pequena">
+                    <img src="imagens/setup.jpg" alt="Setups">
+                    <div class="conteudo">
+                        <h3>⚡ Setups acessíveis</h3>
+                        <p>Hardware de entrada agora roda jogos pesados.</p>
+                        <div class="meta">
+                            <span>🔹 Há 5 horas</span>
+                            <span>💬 32 comentários</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notícia Pequena 3 -->
+                <div class="noticia-pequena">
+                    <img src="imagens/steam.png" alt="Steam">
+                    <div class="conteudo">
+                        <h3>💰 Promoção na Steam</h3>
+                        <p>Jogos com até 90% de desconto essa semana.</p>
+                        <div class="meta">
+                            <span>🔹 Há 8 horas</span>
+                            <span>💬 28 comentários</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Notícia com PODCAST -->
-    <div class="noticia">
-        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437d1" alt="Podcast Gamer">
-        <div class="conteudo">
-            <h2>🎧 Setups gamers ficam mais acessíveis</h2>
-            <p>Novos hardwares prometem alto desempenho com preços mais competitivos.</p>
+        <!-- TRÊS NOVAS NOTÍCIAS MÉDIAS (layout profissional) -->
+        <div class="noticias-secundarias">
+            <div class="card-noticia">
+                <img src="imagens/elden.jpg" alt="Elden Ring">
+                <div class="conteudo">
+                    <h3>🧙 Elden Ring: DLC anunciada</h3>
+                    <p>Expansão "Shadow of the Erdtree" chega em junho com 10 novas áreas.</p>
+                    <span class="tag">Lançamento</span>
+                </div>
+            </div>
 
-            <div class="media">
-                <p>🎙️ Podcast:</p>
-                <audio controls>
-                    <source src="podcast.mp3" type="audio/mpeg">
-                    Seu navegador não suporta áudio.
-                </audio>
+            <div class="card-noticia">
+                <img src="imagens/final.jpeg" alt="Final Fantasy">
+                <div class="conteudo">
+                    <h3>⚔️ Final Fantasy XVI no PC</h3>
+                    <p>Versão para computadores chega otimizada com suporte a mods.</p>
+                    <span class="tag">PC Gamer</span>
+                </div>
+            </div>
+
+            <div class="card-noticia">
+                <img src="imagens/cal of duty.jpg" alt="Call of Duty">
+                <div class="conteudo">
+                    <h3>🔫 Call of Duty 2026 vaza</h3>
+                    <p>Novo jogo se passará na Guerra do Golfo com modo campanha inédito.</p>
+                    <span class="tag">Exclusivo</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Terceira notícia -->
-    <div class="noticia">
-        <img src="https://images.unsplash.com/photo-1606813909355-48f1f4a3b3f3" alt="Realidade Virtual">
-        <div class="conteudo">
-            <h2>🚀 Realidade virtual ganha força</h2>
-            <p>Óculos VR e experiências imersivas se tornam tendência no mercado gamer.</p>
-        </div>
-    </div>
+        <!-- SEÇÃO DE MÍDIA (vídeo e podcast) -->
+        <div class="media-section">
+            <div class="noticia-media">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420" alt="Video Review">
+                <div class="conteudo">
+                    <h3>🎥 Análise da semana</h3>
+                    <video controls>
+                        <source src="https://www.youtube.com/embed/-vcGG40dMoA?si=hzqWSM08RBh81fJs" type="video/mp4">
+                        Seu navegador não suporta vídeo.
+                    </video>
+                </div>
+            </div>
 
-    <!-- Colaboradores -->
-    <section class="colaboradores">
-        <h2>🤝 Colaboradores</h2>
-        <div class="cards">
-            <div class="card">
-                <p><strong>Flexes</strong></p>
-                <p>Editor-chefe</p>
-            </div>
-            <div class="card">
-                <p><strong>Ana Silva</strong></p>
-                <p>Redatora Gamer</p>
-            </div>
-            <div class="card">
-                <p><strong>Lucas Rocha</strong></p>
-                <p>Designer</p>
+            <div class="noticia-media">
+                <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437d1" alt="Podcast">
+                <div class="conteudo">
+                    <h3>🎙️ Podcast GameNews</h3>
+                    <audio controls>
+                        <source src="podcast.mp3" type="audio/mpeg">
+                        Seu navegador não suporta áudio.
+                    </audio>
+                </div>
             </div>
         </div>
-    </section>
 
-</main>
+        <!-- Colaboradores -->
+        <section class="colaboradores">
+            <h2>🤝 Nossa Equipe</h2>
+            <div class="cards">
+                <div class="card">
+                    <p><strong>Matheus</strong></p>
+                    <p>Editor-chefe</p>
+                </div>
+                <div class="card">
+                    <p><strong>Wellington</strong></p>
+                    <p>Redator Gamer</p>
+                </div>
+                <div class="card">
+                    <p><strong>Matheus</strong></p>
+                    <p>Designer</p>
+                </div>
+                <div class="card">
+                    <p><strong>Wellington</strong></p>
+                    <p>Video Producer</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<footer>
-    <p>Projeto Integrador - Técnico em Desenvolvimento</p>
-</footer>
+    <footer>
+        <p>Projeto Integrador - Técnico em Desenvolvimento</p>
+        <p style="font-size: 12px; margin-top: 10px;">© 2026 GameNews Brasil - Todos os direitos reservados</p>
+    </footer>
 
+    <script>
+        // Configuração do canvas para os controles caindo
+        const canvas = document.getElementById('controlesCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const controles = [
+            '🎮', '🎯', '🎲', '🕹️', '👾', '🎪', '🎰', '🎱', '🎳', '🎮',
+            '⬆️', '⬇️', '⬅️', '➡️', '🔴', '🔵', '🟢', '🟡', '⚪', '⚫',
+            'A', 'B', 'X', 'Y', 'L', 'R', 'START', 'SELECT', '⭐', '💎',
+            '🎧', '💻', '🖱️', '⌨️', '🎨', '⚡', '🔥', '💯', '🎵', '📱'
+        ];
+
+        class ControleCaindo {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.symbol = controles[Math.floor(Math.random() * controles.length)];
+                this.size = 20 + Math.random() * 25;
+                this.speed = 1.5 + Math.random() * 4;
+                this.opacity = 0.2 + Math.random() * 0.6;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.03;
+                this.colors = [
+                    'rgba(0, 255, 153, ',
+                    'rgba(0, 204, 255, ',
+                    'rgba(255, 0, 255, ',
+                    'rgba(255, 255, 0, '
+                ];
+                this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+            }
+
+            update() {
+                this.y += this.speed;
+                this.rotation += this.rotationSpeed;
+                this.x += Math.sin(Date.now() * 0.001) * 0.2;
+
+                if (this.y > canvas.height + 50) {
+                    this.reset();
+                    this.y = -50;
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.font = `${this.size}px 'Arial', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif`;
+                ctx.fillStyle = this.color + this.opacity + ')';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.symbol, 0, 0);
+                ctx.shadowColor = this.color.replace('rgba', 'rgb').replace(/, [^,]+\)/, ')');
+                ctx.shadowBlur = 10;
+                ctx.fillText(this.symbol, 0, 0);
+                ctx.restore();
+            }
+        }
+
+        const numeroControles = Math.floor((canvas.width * canvas.height) / 25000);
+        const controlesCaindo = [];
+
+        for (let i = 0; i < numeroControles; i++) {
+            controlesCaindo.push(new ControleCaindo());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            controlesCaindo.forEach(controle => {
+                controle.update();
+                controle.draw(ctx);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            const novoNumero = Math.floor((canvas.width * canvas.height) / 25000);
+            while (controlesCaindo.length < novoNumero) {
+                controlesCaindo.push(new ControleCaindo());
+            }
+            while (controlesCaindo.length > novoNumero) {
+                controlesCaindo.pop();
+            }
+        });
+    </script>
 </body>
 </html>
